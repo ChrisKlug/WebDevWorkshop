@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "Spa";
+}
+
+<div class="spa">
+
+    <div id="loading">Loading...</div>
+
+    <div id="app" class="hidden">
+        <input type="text" id="txtSearch" autofocus placeholder="Search!" data-bind="css:{ busy:isSearching }" />
+
+        <div id="searchResults" data-bind="visible:hasResults">
+
+            <div class="artists">
+                <strong>Artists</strong>
+                <ul data-bind="foreach: artists">
+                    <li>
+                        <img data-bind="attr: { src: image != null ? image.url : null }" class="preview-image" />
+                        <div>
+                            <span data-bind="text: name"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="albums">
+                <strong>Albums</strong>
+                <ul data-bind="foreach: albums">
+                    <li>
+                        <img data-bind="attr: { src: image != null ? image.url : null }" class="preview-image" />
+                        <div>
+                            <span data-bind="text: name"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tracks">
+                <strong>Tracks</strong>
+                <ul data-bind="foreach: tracks">
+                    <li>
+                        <img data-bind="attr: { src: image != null ? image.url : null }" class="preview-image" />
+                        <div>
+                            <span data-bind="text: name"></span>
+                            <span class="sub" data-bind="text: artist"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <form asp-action="SignOut" asp-controller="Auth">
+            <a href="javascript:document.forms[0].submit()">X</a>
+        </form>
+    </div>
+</div>
+
+<script src="/spa-config.js"></script>
+<script src="/node_modules/oidc-client/dist/oidc-client.min.js"></script>
+<script src="/node_modules/systemjs/dist/system.js"></script>
+<script>
+    System.config({
+        baseURL: "/build/",
+        packages: {
+            "/": {
+                defaultExtension: "js"
+            },
+            "oidc-client": {
+                defaultExtension: ""
+            },
+            "rxjs": { main: "index.js" },
+            "rxjs/operators": { main: "index.js" }
+        },
+        map: {
+            "rxjs": "/node_modules/rxjs/",
+            "knockout": "/node_modules/knockout/build/output/knockout-latest.js"
+        },
+        meta: {
+            "knockout": { format: "global" }
+        }
+    });
+    System.registerDynamic('oidc-client', [], false, function (require, exports, module) {
+        module.exports = Oidc;
+    });
+    System.import("App");
+</script>
