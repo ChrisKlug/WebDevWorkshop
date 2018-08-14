@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) != 'Debug'">
+    <Exec Command="npm i &amp;&amp; npm run build" />
+  </Target>
+
 </Project>
