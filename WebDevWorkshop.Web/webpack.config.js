@@ -34,4 +34,7 @@ module.exports = env => ({
         new copyWebpackPlugin([{from: "node_modules/oidc-client/dist/oidc-client.min.js", to: ""}])
     ],
     devtool: (env && env.production) ? '' : 'source-map',
+    performance: {
+        hints: (env && env.production) ? false : "warning"
+    }
 })
