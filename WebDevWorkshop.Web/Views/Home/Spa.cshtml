@@ -57,31 +57,4 @@
 </div>
 
 <script src="/spa-config.js"></script>
-<script src="/node_modules/oidc-client/dist/oidc-client.min.js"></script>
-<script src="/node_modules/systemjs/dist/system.js"></script>
-<script>
-    System.config({
-        baseURL: "/build/",
-        packages: {
-            "/": {
-                defaultExtension: "js"
-            },
-            "oidc-client": {
-                defaultExtension: ""
-            },
-            "rxjs": { main: "index.js" },
-            "rxjs/operators": { main: "index.js" }
-        },
-        map: {
-            "rxjs": "/node_modules/rxjs/",
-            "knockout": "/node_modules/knockout/build/output/knockout-latest.js"
-        },
-        meta: {
-            "knockout": { format: "global" }
-        }
-    });
-    System.registerDynamic('oidc-client', [], false, function (require, exports, module) {
-        module.exports = Oidc;
-    });
-    System.import("App");
-</script>
+<script src="/scripts/app.bundle.js"></script>

@@ -1,6 +1,6 @@
 import { SpotifyApi, ISearchResult, SearchType, IArtist, IAlbum, ITrack, IImage } from './SpotifyApi';
 import { Observable } from 'rxjs';
-import 'knockout';
+import * as ko from 'knockout';
 
 export class SearchViewModel {
     constructor(private api: SpotifyApi, input: Observable<string>, maxResults: number) {

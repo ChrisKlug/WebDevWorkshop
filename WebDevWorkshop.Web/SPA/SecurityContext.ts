@@ -1,4 +1,4 @@
-import oidc from 'oidc-client';
+import * as oidc from 'oidc-client';
 
 export class SecurityContext {
     private userManager: oidc.UserManager;

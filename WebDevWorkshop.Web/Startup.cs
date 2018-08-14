@@ -51,21 +51,6 @@ namespace WebDevWorkshop.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseStaticFiles(new StaticFileOptions {
-                    RequestPath = "/node_modules",
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
-                });
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    RequestPath = "/SPA",
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "SPA"))
-                });
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    RequestPath = "/build",
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "build"))
-                });
             }
             
             app.UseWhen(ctx => ctx.Request.Path == "/spa-config.js", app2 =>

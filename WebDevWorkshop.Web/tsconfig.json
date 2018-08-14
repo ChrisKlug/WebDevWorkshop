@@ -1,14 +1,15 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "system",
+        "module": "es2015",
         "moduleResolution": "node",
         "outDir": "./build",
         "noEmitOnError": true,
         "lib": [
             "dom",
             "es2015"
-        ]
+        ],
+        "sourceMap": true
     },
     "include": [
         "SPA"

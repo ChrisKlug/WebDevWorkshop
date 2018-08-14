@@ -3,7 +3,7 @@ import { ISpaConfig } from './ISpaConfig';
 import { SpotifyApi } from './SpotifyApi';
 import { InputObserver } from './InputObserver';
 import { SearchViewModel } from './SearchViewModel';
-import 'knockout';
+import * as ko from 'knockout';
 
 declare var spaConfig: ISpaConfig;
 
