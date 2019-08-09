@@ -8,22 +8,25 @@ namespace WebDevWorkshop.Web.Controllers
     [Route("auth")]
     public class AuthController : Controller
     {
-        [Route("signin")]
-        public IActionResult SignIn(string returnUrl = "/spa") => 
-            Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, OpenIdConnectDefaults.AuthenticationScheme);
+        [HttpGet("signin")]
+        public IActionResult SignIn(string returnUrl = "/spa")
+        {
+            if (!Url.IsLocalUrl(returnUrl))
+            {
+                returnUrl = "/spa";
+            }
 
-        [Route("signout")]
-        [HttpPost]
+            return Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        [HttpPost("signout")]
         public async Task SignOut()
         {
             await HttpContext.SignOutAsync();
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
 
-        [Route("silentsignincallback")]
-        public IActionResult SilentSignInCallback()
-        {
-            return View();
-        }
+        [HttpGet("silentsignincallback")]
+        public IActionResult SilentSignInCallback() => View();
     }
 }

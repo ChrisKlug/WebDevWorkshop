@@ -1,0 +1,125 @@
+@import './Animations.scss';
+
+.popup-wrapper {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: rgba(128, 128, 128, .5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    animation-name: fadeIn;
+    animation-duration: .5s;
+    
+    .popup {
+        position: relative;
+        border: 1px solid black;
+        box-shadow: $box-shadow;
+        background-color: white;
+        width: 50vw;
+        height: 70vh;
+        padding: 2rem;
+        overflow: hidden;
+
+        animation-name: bounceIn;
+        animation-duration: .5s;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+    
+        .close {
+            position: absolute;
+            top: 0rem;
+            right: 1.4rem;
+            font-weight: bold;
+            font-size: 2em;
+            color: #999;
+            cursor: pointer;
+    
+            &:hover {
+                color: #333;
+            }
+        }
+
+        .content {
+            height: 100%;
+        
+            > div {
+                display: flex;
+                justify-content: space-between;
+                height: 100%;
+        
+                > div:first-child, > div:last-child {
+                    margin: 0;
+                }
+        
+                > div {
+                    flex: 1;
+                    height: 100%;
+                    margin: 0 15px;
+        
+                    display: flex;
+                    flex-direction: column;
+        
+                    .loading {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        flex: 1;
+        
+                        .spinner-border {
+                            margin-bottom: 1em;
+                            width: 3rem;
+                            height: 3rem;
+                        }
+                    }
+        
+                    h3 {
+                        margin-bottom: 20px;
+                        margin-top: -5px;
+                    }
+        
+                    ul {
+                        height: 100%;
+                        overflow-y: auto;
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+        
+                        li {
+                            display: flex;
+                            align-items: flex-start;
+                            margin: 10px 0;
+        
+                            &:first-child, &:last-child {
+                                margin: 0;
+                            }
+        
+                            img {
+                                width: 64px;
+                                margin-right: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.closing {
+        animation-name: fadeOut;
+        animation-duration: .2s;
+        animation-fill-mode: forwards;
+        animation-delay: .4s;
+
+        .popup {
+            animation-name: bounceOut;
+            animation-duration: .5s;
+            animation-timing-function: ease-in;
+        }
+    }
+}

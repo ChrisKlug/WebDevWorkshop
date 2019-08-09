@@ -13,21 +13,18 @@ namespace WebDevWorkshop.Web
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        private readonly IConfiguration _config;
+
+        public Startup(IConfiguration config)
         {
-            Config = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-            .AddJsonFile("appSettings.json", false)
-            .AddEnvironmentVariables("WDW_")
-            .Build();
+            _config = config;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddOpenIdConnect(options => {
-                    options.Authority = Config["oidc.authority"];
-                    options.RequireHttpsMetadata = Config.GetValue<bool>("oidc.requireHttpsMetadata");
+                    options.Authority = _config["oidc.authority"];
                     options.ClientId = "WDWWeb";
                     options.SignedOutRedirectUri = "/";
                     options.SaveTokens = true;
@@ -45,32 +42,38 @@ namespace WebDevWorkshop.Web
 
             services.AddMvc();
         }
-        
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
                 app.UseStaticFiles(new StaticFileOptions {
-                    RequestPath = "/node_modules",
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
-                });
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    RequestPath = "/SPA",
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "SPA"))
-                });
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    RequestPath = "/build",
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "build"))
+                    RequestPath = "/TypeScript",
+                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "TypeScript"))
                 });
             }
-            
+            else
+            {
+                app.UseHsts(hsts => hsts.MaxAge(365));
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseCsp(options =>
+            {
+                options.DefaultSources(x => x.Self())
+                    .ConnectSources(x => x.CustomSources(_config["oidc.authority"], _config["api.endpoint"]))
+                    .ScriptSources(x => x.Self().UnsafeInline().UnsafeEval())
+                    .FrameSources(x => x.Self().CustomSources(_config["oidc.authority"]))
+                    .ImageSources(x => x.Self().CustomSources("https://placekitten.com/", "https://i.scdn.co/"));
+            });
+
+            app.UseStaticFiles();
+
             app.UseWhen(ctx => ctx.Request.Path == "/spa-config.js", app2 =>
             {
-                var spaConfig = JsonConvert.SerializeObject(new { oidcAuthority = Config["oidc.authority"], apiBaseUrl = Config["api.baseUrl"] });
+                var spaConfig = JsonConvert.SerializeObject(new { oidcAuthority = _config["oidc.authority"], apiEndpoint = _config["api.endpoint"] });
                 spaConfig = "window.spaConfig = " + spaConfig;
                 app2.Run(async ctx =>
                 {
@@ -78,13 +81,14 @@ namespace WebDevWorkshop.Web
                 });
             });
 
-            app.UseStaticFiles();
-
             app.UseAuthentication();
 
             app.UseMvc();
-        }
 
-        private IConfiguration Config { get; }
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Hello World!");
+            });
+        }
     }
 }

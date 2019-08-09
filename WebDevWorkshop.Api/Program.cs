@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace WebDevWorkshop.Api
 {
@@ -19,6 +13,13 @@ namespace WebDevWorkshop.Api
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((ctx, config) =>
+                {
+                    config
+                        //.AddJsonFile("appSettings.json", false)
+                        //.AddJsonFile($"appSettings.{ctx.HostingEnvironment.EnvironmentName}.json", true)
+                        .AddEnvironmentVariables("WDW_");
+                })
                 .UseStartup<Startup>();
     }
 }

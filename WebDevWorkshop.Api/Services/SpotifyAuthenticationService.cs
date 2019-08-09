@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -6,21 +7,22 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebDevWorkshop.Api.Middlewares
+namespace WebDevWorkshop.Api.Services
 {
     public class SpotifyAuthenticationService : ISpotifyAuthenticationService
     {
-
         private readonly string _clientId;
         private readonly string _clientSecret;
+        private readonly IHttpClientFactory _clientFactory;
         private Task<string> _accessTokenRetrievalTask;
         private DateTime _tokenExpiry = DateTime.MinValue;
-        private object _lockObject = new Object();
+        private object _lockObject = new object();
 
-        public SpotifyAuthenticationService(string clientId, string clientSecret)
+        public SpotifyAuthenticationService(IOptions<SpotifyConfig> config, IHttpClientFactory clientFactory)
         {
-            _clientId = clientId;
-            _clientSecret = clientSecret;
+            _clientId = config.Value.ClientId;
+            _clientSecret = config.Value.Secret;
+            _clientFactory = clientFactory;
         }
 
         public Task<string> GetAccessToken()
@@ -40,7 +42,7 @@ namespace WebDevWorkshop.Api.Middlewares
         {
             return Task.Run(async () =>
             {
-                var client = new HttpClient();
+                var client = _clientFactory.CreateClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_clientId}:{_clientSecret}")));
                 var response = await client.PostAsync("https://accounts.spotify.com/api/token", new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("grant_type", "client_credentials") }));
                 if (!response.IsSuccessStatusCode)

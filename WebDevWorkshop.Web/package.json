@@ -1,27 +1,28 @@
 {
-  "name": "WebDevWorkshop.Web",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "webdevworkshop.dev",
   "scripts": {
-    "build": "tsc",
-    "watch": "concurrently \"tsc --sourceMap true --sourceRoot /SPA/ -w --preserveWatchOutput true\" \"less-watch-compiler Styles wwwroot/styles Site.less\" \"cpx Styles/images/* wwwroot/styles/images --watch\"",
-    "less": "lessc Styles/Site.less wwwroot/styles/site.css"
+    "build": "webpack",
+    "build:prod": "webpack --env.prod",
+    "watch": "webpack --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@types/knockout": "^3.4.58",
-    "cpx": "^1.5.0",
-    "less": "^3.8.1",
-    "less-watch-compiler": "^1.11.3",
-    "typescript": "^3.0.1"
+    "@types/knockout": "^3.4.66",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.1.0",
+    "html-loader": "^0.5.5",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   },
   "dependencies": {
-    "knockout": "^3.4.2",
-    "oidc-client": "^1.5.2",
-    "rxjs": "^6.2.2",
-    "systemjs": "^0.21.4"
+    "bootstrap": "^4.3.1",
+    "knockout": "^3.5.0",
+    "oidc-client": "^1.8.2",
+    "rxjs": "^6.5.2"
   }
 }

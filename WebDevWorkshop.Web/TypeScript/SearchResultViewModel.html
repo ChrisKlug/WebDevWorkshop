@@ -1,0 +1,53 @@
+<div>
+    <div>
+        <!-- ko if: artists -->
+        <h3>Artists</h3>
+        <ul data-bind="foreach: artists">
+            <li>
+                <img data-bind="attr: { 'src': image ? image.url : 'https://placekitten.com/64/64' }" />
+                <span data-bind="text: name"></span>
+            </li>
+        </ul>
+        <!-- /ko -->
+        <!-- ko ifnot: artists -->
+        <div class="loading">
+            <div class="spinner-border"></div>
+            Loading artist...
+        </div>
+        <!-- /ko -->
+    </div>
+    <div>
+        <!-- ko if: albums -->
+        <h3>Albums</h3>
+        <ul data-bind="foreach: albums">
+            <li>
+                <img data-bind="attr: { 'src': image ? image.url : 'https://placekitten.com/64/64' }" />
+                <span data-bind="text: name"></span>
+            </li>
+        </ul>
+        <!-- /ko -->
+        <!-- ko ifnot: albums -->
+        <div class="loading">
+            <div class="spinner-border"></div>
+            Loading albums...
+        </div>
+        <!-- /ko -->
+    </div>
+    <div>
+        <!-- ko if: tracks -->
+        <h3>Tracks</h3>
+        <ul data-bind="foreach: tracks">
+            <li>
+                <img data-bind="attr: { 'src': image ? image.url : 'https://placekitten.com/64/64' }" />
+                <span data-bind="text: name"></span>
+            </li>
+        </ul>
+        <!-- /ko -->
+        <!-- ko ifnot: tracks -->
+        <div class="loading">
+            <div class="spinner-border"></div>
+            Loading tracks...
+        </div>
+        <!-- /ko -->
+    </div>
+</div>

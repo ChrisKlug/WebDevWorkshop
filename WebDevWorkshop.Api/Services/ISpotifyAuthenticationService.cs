@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebDevWorkshop.Api.Middlewares
+namespace WebDevWorkshop.Api.Services
 {
     public interface ISpotifyAuthenticationService
     {

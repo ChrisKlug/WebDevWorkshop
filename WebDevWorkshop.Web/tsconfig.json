@@ -1,16 +1,9 @@
 {
     "compilerOptions": {
+        "outDir": "./wwwroot",
         "target": "es5",
-        "module": "system",
         "moduleResolution": "node",
-        "outDir": "./build",
-        "noEmitOnError": true,
-        "lib": [
-            "dom",
-            "es2015"
-        ]
-    },
-    "include": [
-        "SPA"
-    ]
+        "lib": ["es2015", "dom"],
+        "sourceMap": true
+    }
 }

@@ -3,85 +3,17 @@
     ViewData["Title"] = "Spa";
 }
 
-<div class="spa">
+<div class="spa centerer">
+    <form asp-action="SignOut" asp-controller="Auth" class="sign-out-form">
+        <a href="javascript:document.forms[0].submit()" class="btn btn-warning">Sign out</a>
+    </form>
 
-    <div id="loading">Loading...</div>
-
-    <div id="app" class="hidden">
-        <input type="text" id="txtSearch" autofocus placeholder="Search!" data-bind="css:{ busy:isSearching }" />
-
-        <div id="searchResults" data-bind="visible:hasResults">
-
-            <div class="artists">
-                <strong>Artists</strong>
-                <ul data-bind="foreach: artists">
-                    <li>
-                        <img data-bind="attr: { src: image != null ? image.url : null }" class="preview-image" />
-                        <div>
-                            <span data-bind="text: name"></span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="albums">
-                <strong>Albums</strong>
-                <ul data-bind="foreach: albums">
-                    <li>
-                        <img data-bind="attr: { src: image != null ? image.url : null }" class="preview-image" />
-                        <div>
-                            <span data-bind="text: name"></span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="tracks">
-                <strong>Tracks</strong>
-                <ul data-bind="foreach: tracks">
-                    <li>
-                        <img data-bind="attr: { src: image != null ? image.url : null }" class="preview-image" />
-                        <div>
-                            <span data-bind="text: name"></span>
-                            <span class="sub" data-bind="text: artist"></span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <form asp-action="SignOut" asp-controller="Auth">
-            <a href="javascript:document.forms[0].submit()">X</a>
-        </form>
-    </div>
+    <form class="search-form form-inline">
+        <input type="text" placeholder="Search" class="form-control form-control-lg" autofocus />
+        <button id="btnSearch" class="btn btn-lg btn-primary ml-2" disabled>Search</button>
+    </form>
 </div>
 
 <script src="/spa-config.js"></script>
-<script src="/node_modules/oidc-client/dist/oidc-client.min.js"></script>
-<script src="/node_modules/systemjs/dist/system.js"></script>
-<script>
-    System.config({
-        baseURL: "/build/",
-        packages: {
-            "/": {
-                defaultExtension: "js"
-            },
-            "oidc-client": {
-                defaultExtension: ""
-            },
-            "rxjs": { main: "index.js" },
-            "rxjs/operators": { main: "index.js" }
-        },
-        map: {
-            "rxjs": "/node_modules/rxjs/",
-            "knockout": "/node_modules/knockout/build/output/knockout-latest.js"
-        },
-        meta: {
-            "knockout": { format: "global" }
-        }
-    });
-    System.registerDynamic('oidc-client', [], false, function (require, exports, module) {
-        module.exports = Oidc;
-    });
-    System.import("App");
-</script>
+<script src="/app.bundle.js"></script>
+

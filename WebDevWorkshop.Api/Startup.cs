@@ -3,50 +3,53 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Threading.Tasks;
-using WebDevWorkshop.Api.Middlewares;
 
 namespace WebDevWorkshop.Api
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration config)
         {
-            Config = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appSettings.json", true)
-                .AddEnvironmentVariables("WDW_")
-                .Build();
+            Config = config;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
+            services.Configure<SpotifyConfig>(Config.GetSection("Spotify"));
+
+            services.AddSpotifyProxy();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.Authority = Config["oidc.authority"];
-                    options.RequireHttpsMetadata = Config.GetValue<bool>("oidc.requireHttpsMetaData");
                     options.Audience = "WDWApi";
                 });
 
-            services.AddSpotifyProxy(Config["SpotifyClientId"], Config["SpotifySecret"]);
-
-            services.AddCors();
-        }
-        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseCors(policy => {
-                policy.WithOrigins(Config["cors.host"])
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+            services.AddCors(options => {
+                options.AddPolicy("Default", policy => {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
             });
+        }
 
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<Startup> logger)
+        {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpsRedirection();
+
+            app.UseCors("Default");
 
             app.UseAuthentication();
 
@@ -60,9 +63,11 @@ namespace WebDevWorkshop.Api
                 return next();
             });
 
-            app.UseSpotifyProxy();
+            app.UseSpotifyProxy(options => {
+                options.OnError = err => logger.LogError(err, "Error proxying call to Spotify");
+            });
         }
 
-        private IConfiguration Config { get; }
+        public IConfiguration Config { get; }
     }
 }

@@ -1,16 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using WebDevWorkshop.Api.Middlewares;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class SpotifyProxyExtensions
+    public static class ApplicationBuilderExtensions
     {
-        public static IServiceCollection AddSpotifyProxy(this IServiceCollection services, string clientId, string clientSecret)
-        {
-            return services.AddSingleton<ISpotifyAuthenticationService>(new SpotifyAuthenticationService(clientId, clientSecret));
-        }
-
         public static IApplicationBuilder UseSpotifyProxy(this IApplicationBuilder app, SpotifyProxyOptions options = null)
         {
             if (options == null)
@@ -23,7 +17,9 @@ namespace Microsoft.AspNetCore.Builder
         {
             var options = new SpotifyProxyOptions();
             configCallback(options);
+
             return app.UseMiddleware<SpotifyProxyMiddleware>(options);
+
         }
     }
 }

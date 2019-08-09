@@ -5,13 +5,13 @@ namespace WebDevWorkshop.Web.Controllers
 {
     public class HomeController : Controller
     {
-        [Route("")]
+        [HttpGet("")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Route("spa")]
+        [HttpGet("spa")]
         [Authorize]
         public IActionResult Spa()
         {

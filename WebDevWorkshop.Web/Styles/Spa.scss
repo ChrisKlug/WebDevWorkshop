@@ -1,0 +1,20 @@
+.spa {
+    height: 100%;
+
+    .sign-out-form {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+    }
+
+    input[type=text] {
+        transition: border,background-color,box-shadow .3s;
+    
+        &:focus {
+            outline: none;
+            border: 1px solid #eee;
+            background-color: #eee;
+            box-shadow: 0 0 5px 1px hotpink;
+        }
+    }
+}
