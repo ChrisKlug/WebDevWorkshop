@@ -30,10 +30,6 @@ Finally, it is just a matter of starting up all 3 projects and browsing to https
 
 _Note:_ If you don't have development certificates on your machine, you can add them by running `dotnet dev-certs https --trust`
 
-## Caveats
-
-The code is provided as-is, and I take no responsibility what so ever for what you do with it. It should work...I think... ;)
-
 ## Contact
 
 Feel free to contact me at [@ZeroKoll](https://twitter.com) or at chris at 59north dot com
